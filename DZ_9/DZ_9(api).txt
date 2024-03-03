@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: Заказ ресурсов в облаке
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Dev server
+paths:
+  /clouds:
+    get:
+      summary: Метод по получению ресуросов облака
+      tags:
+        - Clouds
+      operationId: getAllClouds
+      responses:
+        "200" : 
+          description: Успешный ответ со списком ресурсов
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Clouds"
+        "default" : 
+          description: Всё остальное
+          content: 
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Создания заказа на облако
+      tags:
+        - Clouds
+      operationId:  CreateCloud
+      requestBody:
+        content:
+          adplication/json:
+            schema:
+              $ref: "#/components/schemas/Cloud"
+      responses:
+        "200" : 
+          description: Успешный ответ со списком ресурсов
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Clouds"
+        "400":
+          description: Ошибка неправильный запрос клиента в сервер
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Ошибка сервер недоступен
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default" : 
+          description: Всё остальное
+          content: 
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /clouds/{cloud_id}:
+    get:
+      summary: Метод получения заказа на облако по ID
+      tags:
+        - Clouds
+      operationId: getCloudById
+      parameters:  # post-запрос
+        - name: cloud_id  # id номер облака
+          in: path  # Путь post-запроса
+          required: true  # параметр из Clouds
+          description: Идентификатор заказа облака
+          schema:
+            type: integer  # Тип данных параметра
+          example: 123  # Пример 
+      responses:
+        "200":
+          description: Успешный ответ заказа облака по ID
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Cloud"
+        "400":
+          description: Ошибка не правильный запрос клиента в сервер
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Ошибка сервер не доступен
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "default":
+          description: Всё остальное
+          content:
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Отмена заказа
+      tags: 
+        - Clouds
+      operationId: cancelCloudById
+      parameters:
+        - name: cloud_id
+          in: path
+          required: true
+          description: Id заказа облака 
+          schema:
+            type: integer
+          example: 123
+      responses:
+        "200" : 
+          description: Успешная отмена заказа
+          content:
+            adplication/json: {}
+        "default" : 
+          description: Всё остальное
+          content: 
+            adplication/json:
+              schema:
+                $ref: "#/components/schemas/Error" 
+components:
+  schemas:
+    Cloud:
+      type: object
+      properties:
+        cloud_id:
+          type: integer
+          example: 1123
+        ram:
+          type: integer
+          example: 16
+        cpu:
+          type: integer
+          example: 2
+        ssd:
+          type: integer
+        os:
+          type: string
+          example: linux
+    Clouds:
+      type: array
+      items:
+        $ref: "#/components/schemas/Cloud"
+    Error:
+      type: object
+      properties:
+        code_error:
+          type: integer
+          example: 28
+        code_message:
+          type: string
+          example: error
+
