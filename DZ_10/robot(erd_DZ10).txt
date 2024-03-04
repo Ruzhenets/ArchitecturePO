@@ -1,0 +1,37 @@
+
+User {
+	id integer pk increments
+	hash integer
+	name integer
+	e-mail integer
+}
+
+Robots {
+	id integer pk increments
+	model integer
+	fabricNumder integer
+	idGroup integer >* Group.id
+	status integer
+	version string
+	ipAdress integer
+}
+
+Group {
+	id integer pk increments
+	idUser1 integer >* User.id
+	idUser2 integer >* User.id
+	idUser3 integer >* User.id
+}
+
+Shedule {
+	id integer pk increments
+	idRobots integer >* Robots.id
+	dateNime integer
+	TypeJ integer > TypeJ.id
+}
+
+TypeJ {
+	id integer pk increments
+	nameType integer
+}
+
